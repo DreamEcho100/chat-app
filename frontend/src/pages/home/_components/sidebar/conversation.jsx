@@ -1,54 +1,45 @@
-const Conversation = () => {
+import { useMemo } from "react";
+import { getRandomEmoji } from "../../../../libs/utils/get-random-Emoji";
+import useUserConversations from "../../../../libs/utils/zustand/user-conversations";
+
+/**
+ * @param {{
+ * 	conversation: import("../../../../libs/utils/types").Conversation;
+ *  isLastIndex: boolean;
+ *  emoji?: string;
+ * }} props
+ */
+export default function Conversation(props) {
+	const { selectedConversation, setSelectedConversation } = useUserConversations();
+	const emoji = useMemo(() => props.emoji ?? getRandomEmoji(), [props.emoji]);
+
+	const isSelected = selectedConversation?._id === props.conversation._id;
+
 	return (
 		<>
-			<div className="flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer">
+			<div
+				className={`flex items-center gap-2 p-2 py-1 rounded cursor-pointer hover:bg-sky-600 ${
+					isSelected ? "bg-sky-500" : ""
+				}`}
+				onClick={() => {
+					setSelectedConversation(props.conversation);
+				}}
+			>
 				<div className="avatar online">
 					<div className="w-12 rounded-full">
-						<img
-							src="https://cdn0.iconfinder.com/data/icons/communication-line-10/24/account_profile_user_contact_person_avatar_placeholder-512.png"
-							alt="user avatar"
-						/>
+						<img src={props.conversation.profilePicture} alt="user avatar" />
 					</div>
 				</div>
 
 				<div className="flex flex-col flex-1">
-					<div className="flex gap-3 justify-between">
-						<p className="font-bold text-gray-200">John Doe</p>
-						<span className="text-xl">🎃</span>
+					<div className="flex justify-between gap-3">
+						<p className="font-bold text-gray-200">{props.conversation.fullName}</p>
+						<span className="text-xl">{emoji}</span>
 					</div>
 				</div>
 			</div>
 
-			<div className="divider my-0 py-0 h-1" />
+			{!props.isLastIndex && <div className="h-1 py-0 my-0 divider" />}
 		</>
 	);
-};
-export default Conversation;
-
-// STARTER CODE SNIPPET
-// const Conversation = () => {
-// 	return (
-// 		<>
-// 			<div className='flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer'>
-// 				<div className='avatar online'>
-// 					<div className='w-12 rounded-full'>
-// 						<img
-// 							src='https://cdn0.iconfinder.com/data/icons/communication-line-10/24/account_profile_user_contact_person_avatar_placeholder-512.png'
-// 							alt='user avatar'
-// 						/>
-// 					</div>
-// 				</div>
-
-// 				<div className='flex flex-col flex-1'>
-// 					<div className='flex gap-3 justify-between'>
-// 						<p className='font-bold text-gray-200'>John Doe</p>
-// 						<span className='text-xl'>🎃</span>
-// 					</div>
-// 				</div>
-// 			</div>
-
-// 			<div className='divider my-0 py-0 h-1' />
-// 		</>
-// 	);
-// };
-// export default Conversation;
+}

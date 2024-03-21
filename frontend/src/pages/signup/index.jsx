@@ -14,9 +14,7 @@ const signUpSchema = z
 	})
 	.refine((data) => data.password === data.confirmPassword, {
 		message: "Password and confirm password do not match",
-		params: {
-			statusCode: 400,
-		},
+		params: { statusCode: 400 },
 		path: ["confirmPassword"],
 	});
 
@@ -48,21 +46,21 @@ export default function SignUpPage() {
 	const { onSubmit, isLoading } = useSignUpForm();
 
 	return (
-		<div className="flex flex-col items-center justify-center min-w-96 mx-auto">
-			<div className="w-full p-6 rounded-lg shadow-md bg-gray-400 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-0">
+		<div className="flex flex-col items-center justify-center mx-auto min-w-96">
+			<div className="w-full p-6 bg-gray-400 bg-opacity-0 rounded-lg shadow-md bg-clip-padding backdrop-filter backdrop-blur-lg">
 				<h1 className="text-3xl font-semibold text-center text-gray-300">
 					Sign Up <span className="text-blue-500"> ChatApp</span>
 				</h1>
 
 				<form onSubmit={onSubmit}>
 					<div>
-						<label className="label p-2">
+						<label className="p-2 label">
 							<span className="text-base label-text">Full Name</span>
 						</label>
 						<input
 							name="fullName"
 							placeholder="John Doe"
-							className="w-full input input-bordered  h-10"
+							className="w-full h-10 input input-bordered"
 							required
 							minLength={3}
 							maxLength={120}
@@ -70,13 +68,13 @@ export default function SignUpPage() {
 					</div>
 
 					<div>
-						<label className="label p-2 ">
+						<label className="p-2 label ">
 							<span className="text-base label-text">Username</span>
 						</label>
 						<input
 							name="username"
 							placeholder="johndoe"
-							className="w-full input input-bordered h-10"
+							className="w-full h-10 input input-bordered"
 							required
 							minLength={3}
 							maxLength={120}
@@ -91,7 +89,7 @@ export default function SignUpPage() {
 							type="password"
 							name="password"
 							placeholder="Enter Password"
-							className="w-full input input-bordered h-10"
+							className="w-full h-10 input input-bordered"
 							required
 							minLength={8}
 							maxLength={120}
@@ -106,7 +104,7 @@ export default function SignUpPage() {
 							name="confirmPassword"
 							type="password"
 							placeholder="Confirm Password"
-							className="w-full input input-bordered h-10"
+							className="w-full h-10 input input-bordered"
 							required
 							minLength={8}
 							maxLength={120}
@@ -128,14 +126,14 @@ export default function SignUpPage() {
 						</div>
 					</div>
 
-					<Link href="/login" className="text-sm hover:underline hover:text-blue-600 mt-2 inline-block">
+					<Link href="/login" className="inline-block mt-2 text-sm hover:underline hover:text-blue-600">
 						Already have an account?
 					</Link>
 
 					<div>
 						<button
 							type="submit"
-							className="btn btn-block btn-sm mt-2 border border-slate-700 capitalize"
+							className="mt-2 capitalize border btn btn-block btn-sm border-slate-700"
 							disabled={isLoading}
 						>
 							{isLoading ? <span className="loading loading-spinner" /> : "sign up"}

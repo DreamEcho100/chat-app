@@ -6,29 +6,30 @@ import Conversation from "../models/conversation.js";
 /** @type {import("~/libs/utils/types/index.d.ts").ExpressProtectedController} */
 export async function sendMessageController(req, res) {
 	const schema = z.object({
-		message: z.string().min(1),
+		content: z.string().min(1),
 	});
 
 	const input = schema.parse(req.body);
 
 	const sender = req.user;
+	const senderId = req.user._id;
 	const receiverId = req.params.id;
 
 	let conversation = await Conversation.findOne({
-		members: { $all: [sender._id, receiverId] },
+		participants: { $all: [senderId, receiverId] },
 	});
 
 	if (!conversation) {
 		conversation = await Conversation.create({
-			participants: [sender._id, receiverId],
+			participants: [senderId, receiverId],
 		});
 	}
 
 	const newMessage = new Message({
 		conversationId: conversation._id,
-		senderId: sender._id,
+		senderId: senderId,
 		receiverId,
-		message: input.message,
+		content: input.content,
 	});
 
 	if (newMessage) {
@@ -49,11 +50,14 @@ export async function sendMessageController(req, res) {
 /** @type {import("~/libs/utils/types/index.d.ts").ExpressProtectedController}*/
 export async function getMessagesController(req, res) {
 	const senderId = req.user._id;
-	const userToChatId = req.params.id;
+	const receiverId = req.params.id;
 
 	const conversation = await Conversation.findOne({
-		members: { $all: [senderId, userToChatId] },
+		participants: { $all: [senderId, receiverId] },
 	}).populate("messages"); // Not reference but actual messages
+
+	console.log("[senderId, receiverId]", [senderId, receiverId]);
+	console.log("conversation", conversation);
 
 	if (!conversation) {
 		return res.status(200).json([]);

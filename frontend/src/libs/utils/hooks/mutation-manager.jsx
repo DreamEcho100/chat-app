@@ -2,14 +2,14 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 
 /**
- * @template Result
+ * @template Data
  * @template MutationParams
  * @template Input
  *
  * @typedef {{
  *  getInputData: (params: MutationParams) => Input;
  * 	mutationFn: (input: Input) => Promise<Response>;
- *  onSuccess: (result: Result, params: MutationParams) => void;
+ *  onSuccess: (Data: Data, params: MutationParams) => void;
  *  onError?: (error: Error) => void;
  *  onAllSettled?: () => void;
  *  stopDefault?: { errorHandling?: boolean, successHandling?: boolean }
@@ -17,11 +17,11 @@ import toast from "react-hot-toast";
  */
 
 /**
- * @template Result
+ * @template Data
  * @template MutationParams
  * @template Input
  *
- * @param {useMutationManagerParams<Result, MutationParams, Input>} params
+ * @param {useMutationManagerParams<Data, MutationParams, Input>} params
  */
 export default function useMutationManager(params) {
 	const [isLoading, setIsLoading] = useState(false);
@@ -38,17 +38,17 @@ export default function useMutationManager(params) {
 			const response = await params.mutationFn(input);
 
 			if (!response.ok || response.status >= 400) {
-				const result = await response.json();
-				throw new Error(result.message);
+				const Data = await response.json();
+				throw new Error(Data.message);
 			}
 
-			const result = /** @type {Result} */ await response.json();
+			const Data = /** @type {Data} */ await response.json();
 
 			if (!params.stopDefault?.successHandling) {
 				toast.success("Successful operation", { icon: "🚀" });
 			}
 
-			params.onSuccess(result, mutationParams);
+			params.onSuccess(Data, mutationParams);
 		} catch (error) {
 			if (!params.stopDefault?.errorHandling) {
 				if (error instanceof Error) {

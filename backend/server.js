@@ -9,7 +9,7 @@ import express from "express";
 import { ZodError } from "zod";
 import connectToMongoDB from "./libs/db/mongoose/connect.js";
 import { BACKEND_ENV } from "./libs/utils/env.js";
-import { expressErrorFormatter } from "./libs/utils/errors.js";
+import { expressErrorResponse } from "./libs/utils/errors.js";
 import authRoutes from "./routes/auth.js";
 import messageRoutes from "./routes/message.js";
 import cookieParser from "cookie-parser";
@@ -28,7 +28,7 @@ app.use(
 	 * @param {import("express").NextFunction} next
 	 */
 	(err, req, res, next) => {
-		expressErrorFormatter(res, err);
+		expressErrorResponse(res, err);
 		next();
 	},
 );

@@ -1,21 +1,32 @@
 import { z } from "zod";
 
+/** @param {unknown} err */
+export function getFormattedErrorMessage(err) {
+	let message = "Something went wrong";
+
+	if (err instanceof z.ZodError) {
+		message = err.errors.map((error) => `${error.path.join(".")}: ${error.message}.`).join(" \n\n");
+	} else if (err instanceof Error) {
+		message = err.message;
+	}
+
+	return message;
+}
+
 /**
  * @param {import('express').Response} res
  * @param {unknown} err
  */
-export function expressErrorFormatter(res, err) {
+export function expressErrorResponse(res, err) {
 	console.error(err);
-	if (err instanceof z.ZodError) {
-		res.status(400).json({
-			message: "Validation failed",
-			errors: err.errors,
-		});
-	} else {
-		res.status(res.statusCode ?? 500).json({
-			message: res.statusMessage ?? "Something went wrong",
-		});
-	}
+
+	const errorMessage = getFormattedErrorMessage(err);
+	const errorStatusCode = err instanceof z.ZodError ? 400 : res.statusCode ?? 500;
+
+	res.status(400).json({
+		message: errorMessage,
+		errors: errorStatusCode,
+	});
 }
 
 /**
@@ -29,7 +40,7 @@ export function asyncErrorHandler(fn) {
 			await fn(req, res, next);
 		} catch (err) {
 			// return next(e);
-			expressErrorFormatter(res, err);
+			expressErrorResponse(res, err);
 		}
 	};
 }

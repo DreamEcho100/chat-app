@@ -1,10 +1,11 @@
 import jwt from "jsonwebtoken";
 import { BACKEND_ENV } from "../libs/utils/env.js";
 import User from "../models/user.js";
+import { JWT_TOKEN_COOKIE_NAME } from "../libs/utils/constants.js";
 
 /** @type {import("~/libs/utils/types/index.d.ts").ExpressProtectedRoutesMiddleware} */
 export default async function protectedRoutesMiddleware(req, res, next) {
-	const token = req.cookies.token;
+	const token = req.cookies[JWT_TOKEN_COOKIE_NAME];
 
 	if (typeof token !== "string") {
 		return res.status(401).json({

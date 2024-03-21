@@ -8,7 +8,7 @@ export default function zodFormDataValidator(formData, schema) {
 	if (!inputResult.success) {
 		const errorMessage = `Invalid input: ${inputResult.error.errors
 			.map((error) => {
-				return `${error.path.join(".")}: ${error.message}`;
+				return `${error.path.join(".")}: ${error.message}.`;
 			})
 			.join("\n")}`;
 

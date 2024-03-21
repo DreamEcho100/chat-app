@@ -9,7 +9,7 @@ import { JWT_TOKEN_COOKIE_NAME } from "../libs/utils/constants.js";
  * @param {"male" | "female"} gender
  */
 function generateDefaultUserProfilePicture(username, gender) {
-	return `https://avatars.iran.liara.run/public/${gender === "female" ? "girl" : "boy"}/?username=${username}`;
+	return `https://avatar.iran.liara.run/public/${gender === "female" ? "girl" : "boy"}/?username=${username}`;
 	// return `https://ui-avatars.com/api/?name=${username}&background=random&color=fff&size=200&bold=true&rounded=true&length=1&font-size=0.33&uppercase=true`
 }
 

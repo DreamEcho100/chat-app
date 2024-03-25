@@ -3,7 +3,14 @@ import { BACKEND_ENV } from "../libs/utils/env.js";
 import User from "../models/user.js";
 import { JWT_TOKEN_COOKIE_NAME } from "../libs/utils/constants.js";
 
-/** @type {import("~/libs/utils/types/index.d.ts").ExpressProtectedRoutesMiddleware} */
+// /** @type {import("~/libs/utils/types/index.d.ts").ExpressProtectedRoutesMiddleware} */
+/**
+ *
+ * @param {import("express").Request & { user?: import("~/libs/utils/types/index.js").User; }} req
+ * @param {import("express").Response} res
+ * @param {import("express").NextFunction} next
+ * @returns
+ */
 export default async function protectedRoutesMiddleware(req, res, next) {
 	const token = req.cookies[JWT_TOKEN_COOKIE_NAME];
 

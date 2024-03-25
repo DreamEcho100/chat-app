@@ -34,15 +34,16 @@ export default function SearchInput() {
 				event.preventDefault();
 
 				const formData = new FormData(/** @type {HTMLFormElement} */ (event.target));
-				const search = formData.get("search")?.toString() ?? "";
 
-				const result = sendMessageSchema.safeParse({ search });
+				const inputResult = sendMessageSchema.safeParse(formData);
 
-				if (!result.success) {
+				if (!inputResult.success) {
 					return toast.error("Search term must be at least 3 characters long");
 				}
 
-				const conversation = conversations.find((c) => c.fullName.toLowerCase().includes(search.toLowerCase()));
+				const input = inputResult.data;
+
+				const conversation = conversations.find((c) => c.fullName.toLowerCase().includes(input.search.toLowerCase()));
 
 				if (conversation) {
 					setSelectedConversation(conversation);

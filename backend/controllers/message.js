@@ -1,7 +1,7 @@
 import { z } from "zod";
-import User from "../models/user.js";
 import Message from "../models/message.js";
 import Conversation from "../models/conversation.js";
+import { getReceiverSocketId } from "../libs/socket.js";
 
 /** @type {import("~/libs/utils/types/index.d.ts").ExpressProtectedController} */
 export async function sendMessageController(req, res) {
@@ -35,12 +35,21 @@ export async function sendMessageController(req, res) {
 	if (newMessage) {
 		conversation.messages.push(newMessage._id);
 	}
-
+	// req.io
 	await Promise.all([newMessage.save(), conversation.save()]);
 
-	res.status(201).json(newMessage);
+	const receiverSocketId = getReceiverSocketId(receiverId);
+	if (receiverSocketId) {
+		// io.to(<socket_id>).emit() used to send events to specific client
+		// @ts-ignore
+		// const io = req.app.get("io");
+		req.io.to(receiverSocketId).emit("newMessage", newMessage);
+		// io.to(receiverSocketId).emit("new-message", newMessage);
+	}
 
 	// Socket io functionality will go here
+
+	res.status(201).json(newMessage);
 	// // Send notification to the receiver
 	// // @ts-ignore
 	// const io = req.app.get("io");
@@ -55,9 +64,6 @@ export async function getMessagesController(req, res) {
 	const conversation = await Conversation.findOne({
 		participants: { $all: [senderId, receiverId] },
 	}).populate("messages"); // Not reference but actual messages
-
-	console.log("[senderId, receiverId]", [senderId, receiverId]);
-	console.log("conversation", conversation);
 
 	if (!conversation) {
 		return res.status(200).json([]);

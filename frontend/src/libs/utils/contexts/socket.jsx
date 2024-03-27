@@ -32,7 +32,6 @@ export function SocketContextProvider(props) {
 
 			setSocket(socket);
 
-			console.log("get-online-users");
 			// socket.on() is used to listen to the events. can be used both on client and server side
 			socket.on(
 				"get-online-users",

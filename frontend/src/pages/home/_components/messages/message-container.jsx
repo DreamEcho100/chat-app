@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import useUserConversations from "../../../../libs/utils/zustand/user-conversations";
+import useUserConversations from "../../../../libs/utils/zustand/user-conversation";
 import MessageInput from "./message-input";
 import Messages from "./messages";
 import { TiMessages } from "react-icons/ti";

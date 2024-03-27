@@ -1,5 +1,5 @@
 import { useAuthContext } from "../../../../libs/utils/contexts/auth";
-import useUserConversations from "../../../../libs/utils/zustand/user-conversations";
+import useUserConversations from "../../../../libs/utils/zustand/user-conversation";
 
 /** @param {string} dateString */
 export function extractTime(dateString) {

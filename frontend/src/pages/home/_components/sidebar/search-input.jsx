@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { IoSearchSharp } from "react-icons/io5";
-import useUserConversations from "../../../../libs/utils/zustand/user-conversations";
+import useUserConversations from "../../../../libs/utils/zustand/user-conversation";
 import toast from "react-hot-toast";
 import useQueryManager from "../../../../libs/utils/hooks/query-manager";
 import { z } from "zod";

@@ -1,12 +1,47 @@
 import { useEffect, useRef } from "react";
 import useQueryManager from "../../../../libs/utils/hooks/query-manager";
-import useUserConversations from "../../../../libs/utils/zustand/user-conversations";
+import useUserConversation from "../../../../libs/utils/zustand/user-conversation";
 import Message from "./message";
 import MessageSkeleton from "../../../../components/core/skeletons/message";
 
+import notificationSound from "../../../../assets/sounds/notification.mp3";
+import { useSocketContext } from "../../../../libs/utils/contexts/socket";
+
+// /** @param {{ onNewMessageArrival: (newMessage: import("../../../../libs/utils/types").Message) => void; }} params */
+function useListenMessages() {
+	const { socket } = useSocketContext();
+	const { messages, setMessages } = useUserConversation();
+
+	useEffect(() => {
+		socket?.on(
+			"newMessage",
+			/** @param {import("../../../../libs/utils/types").Message} newMessage */
+			(newMessage) => {
+				newMessage.shouldShake = true;
+				const sound = new Audio(notificationSound);
+				sound.play();
+				setMessages([...messages, newMessage]);
+				// params.onNewMessageArrival(newMessage);
+			},
+		);
+
+		return () => {
+			socket?.off("newMessage");
+		};
+	}, [socket, setMessages, messages]);
+}
+
 export default function Messages() {
-	const { messages, setMessages, selectedConversation } = useUserConversations();
+	const { messages, setMessages, selectedConversation } = useUserConversation();
 	const lastMessageRef = useRef(/** @type {null | HTMLDivElement} */ (null));
+	useListenMessages();
+	// {
+	// onNewMessageArrival: () => {
+	// 	setTimeout(() => {
+	// 		lastMessageRef.current?.scrollIntoView({ behavior: "smooth" });
+	// 	}, 100);
+	// },
+	// }
 
 	const { query } = useQueryManager({
 		queryKey: "messages",

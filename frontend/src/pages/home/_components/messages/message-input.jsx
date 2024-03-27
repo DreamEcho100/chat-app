@@ -2,7 +2,7 @@ import { BsSend } from "react-icons/bs";
 
 import toast from "react-hot-toast";
 import { z } from "zod";
-import useUserConversations from "../../../../libs/utils/zustand/user-conversations";
+import useUserConversations from "../../../../libs/utils/zustand/user-conversation";
 import useFormManager from "../../../../libs/utils/hooks/form-manager";
 import { useId } from "react";
 

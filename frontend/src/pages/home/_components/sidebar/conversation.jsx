@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { getRandomEmoji } from "../../../../libs/utils/get-random-Emoji";
-import useUserConversations from "../../../../libs/utils/zustand/user-conversations";
+import useUserConversations from "../../../../libs/utils/zustand/user-conversation";
+import { useSocketContext } from "../../../../libs/utils/contexts/socket";
 
 /**
  * @param {{
@@ -12,6 +13,9 @@ import useUserConversations from "../../../../libs/utils/zustand/user-conversati
 export default function Conversation(props) {
 	const { selectedConversation, setSelectedConversation } = useUserConversations();
 	const emoji = useMemo(() => props.emoji ?? getRandomEmoji(), [props.emoji]);
+
+	const { onlineUsers } = useSocketContext();
+	const isOnline = onlineUsers.includes(props.conversation._id);
 
 	const isSelected = selectedConversation?._id === props.conversation._id;
 
@@ -25,7 +29,7 @@ export default function Conversation(props) {
 					setSelectedConversation(props.conversation);
 				}}
 			>
-				<div className="avatar online">
+				<div className={`avatar ${isOnline ? "online" : "offline"}`}>
 					<div className="w-12 rounded-full">
 						<img src={props.conversation.profilePicture} alt="user avatar" />
 					</div>

@@ -4,6 +4,7 @@ import type { io } from "~/libs/socket.js";
 export interface User {
 	_id: import("mongoose").Types.ObjectId;
 	username: string;
+	fullName: string;
 	profilePicture: string;
 	gender: "male" | "female";
 	createdAt: NativeDate;

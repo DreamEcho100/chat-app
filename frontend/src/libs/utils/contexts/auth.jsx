@@ -4,6 +4,7 @@ import { createContext, useContext, useState } from "react";
  * @typedef {{
  *  _id: string;
  *  username: string,
+ *  fullName: string,
  *  profilePicture: string,
  *  gender: "male" | "female",
  *  createdAt: Date,

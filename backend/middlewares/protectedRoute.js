@@ -41,6 +41,7 @@ export default async function protectedRoutesMiddleware(req, res, next) {
 	req.user = {
 		_id: user._id,
 		username: user.username,
+		fullName: user.fullName,
 		createdAt: user.createdAt,
 		updatedAt: user.updatedAt,
 		__v: user.__v,
